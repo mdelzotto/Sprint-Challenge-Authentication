@@ -1,13 +1,14 @@
 const axios = require('axios');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const db = require('../database/dbConfig');
 
-const { authenticate } = require('../auth/authenticate');
+const { authenticate, generateToken } = require('../auth/authenticate');
+const db = require('../database/dbConfig');
+const bcrypt = require("bcryptjs");
+const Users = require('../users/users-model.js');
+
 
 module.exports = server => {
   server.post('/api/register', register);
-  server.post('/api/login', login);
+  server.post('/api/login', login, generateToken);
   server.get('/api/jokes', authenticate, getJokes);
 };
 
@@ -43,7 +44,7 @@ function register(req, res) {
 	      }
 }
 
-function generateToken(user) {
+/* function generateToken(user) {
 	       const payload = {
 		         username: user.username
 	       }
@@ -54,7 +55,7 @@ function generateToken(user) {
 		              expiresIn: '10m'
 	        }
 	        return jwt.sign(payload, secret, options)
-}
+} */
 
 function login(req, res) {
   // implement user login
